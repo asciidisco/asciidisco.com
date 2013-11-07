@@ -2,41 +2,41 @@
 // Setup your Ghost install for various environments
 
 var path = require('path'),
+    fs = require('fs'),
     config;
+
+// check if we have a passcode file for our mail server
+var config = {mail: {}};
+try {
+  config = require(__dirname + '/env.js');
+} catch (e) {}
 
 config = {
     // ### Development **(default)**
     development: {
-        // The url to use when providing links to the site, E.g. in RSS and email.
-        url: 'http://my-ghost-blog.com',
-
-        // Example mail config
-        // Visit http://docs.ghost.org/mail for instructions
-        // ```
-        //  mail: {
-        //      transport: 'SMTP',
-        //      options: {
-        //          service: 'Mailgun',
-        //          auth: {
-        //              user: '', // mailgun username
-        //              pass: ''  // mailgun password
-        //          }
-        //      }
-        //  },
-        // ```
-
+        url: 'http://localhost:3000',
+        mail: {},
         database: {
             client: 'sqlite3',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost-dev.db')
+                filename: fs.realpathSync('./content/data/ghost-dev.db')
             },
             debug: false
         },
         server: {
-            // Host to be passed to node's `net.Server#listen()`
             host: '127.0.0.1',
-            // Port to be passed to node's `net.Server#listen()`, for iisnode set this to `process.env.PORT`
-            port: '2368'
+            port: '3000'
+        },
+        mail: {
+            fromaddress: 'dev@asciidisco.com',
+            transport: 'SMTP',
+            options: {
+                service: 'Mailgun',
+                auth: {
+                    user: 'postmaster@asciidisco.mailgun.org',
+                    pass: config.mail.pass
+                 }
+            }
         }
     },
 
@@ -49,14 +49,12 @@ config = {
         database: {
             client: 'sqlite3',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost.db')
+                filename: fs.realpathSync('./content/data/ghost.db')
             },
             debug: false
         },
         server: {
-            // Host to be passed to node's `net.Server#listen()`
             host: '127.0.0.1',
-            // Port to be passed to node's `net.Server#listen()`, for iisnode set this to `process.env.PORT`
             port: '65520'
         },
         mail: {
@@ -66,7 +64,7 @@ config = {
                 service: 'Mailgun',
                 auth: {
                     user: 'postmaster@asciidisco.mailgun.org',
-                    pass: '7kyd9y299my8'
+                    pass: config.mail.pass
                  }
             }
         }
@@ -82,7 +80,7 @@ config = {
         database: {
             client: 'sqlite3',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost-test.db')
+                filename: fs.realpathSync('./content/data/ghost.db')
             }
         },
         server: {
@@ -98,7 +96,7 @@ config = {
         database: {
             client: 'sqlite3',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost-travis.db')
+                filename: fs.realpathSync('./content/data/ghost.db')
             }
         },
         server: {
