@@ -3,3 +3,4 @@ production
 config
 env.js
 content/data/ghost.db
+content/images
