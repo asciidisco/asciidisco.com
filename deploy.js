@@ -90,16 +90,27 @@ function deploy () {
   );
 }
 
+// execute the rollback command
 function rollback () {
   restart('last',
     console.log.bind(console, '\nAll done, thanks for watching!')
   );
 }
 
-if (process.argv[2] === 'rollback') {
-  rollback();
+// execute the forward command
+function forward () {
+  restart('current',
+    console.log.bind(console, '\nAll done, thanks for watching!')
+  );
 }
 
-if (process.argv[2] === 'deploy') {
+// check what to do
+if (process.argv[2] === 'rollback') {
+  rollback();
+} else if (process.argv[2] === 'deploy') {
   deploy();
+} else if (process.argv[2] === 'forward') {
+  forward();
+} else {
+  console.log('I don´t know the command!')
 }
